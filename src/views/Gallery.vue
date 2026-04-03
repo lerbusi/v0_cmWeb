@@ -22,7 +22,7 @@ import half01 from "../assets/images/gallery/half-01.png";
 import half02 from "../assets/images/gallery/half-02.JPEG";
 import half03 from "../assets/images/gallery/half-03.png";
 import half04 from "../assets/images/gallery/half-04.JPEG";
-import halfTf01 from "../assets/images/gallery/half-tf01.jpg";
+import halfTf01 from "../assets/images/gallery/half-tf01.png";
 
 import pngtuber01 from "../assets/images/gallery/pngtuber-01.gif";
 
