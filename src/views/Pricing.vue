@@ -6,36 +6,28 @@ const pricingPlans = [
     name: "Q版",
     nameEn: "CHIBI",
     price: "NT$ 500",
-    description: "Q版小人簡單全身圖",
-    features: ["複雜服設將簡化", "透明背景，可選有色邊框", "提供高解析度 PNG"],
+    description: "Q版全身小人",
+    features: [
+      "複雜服設將簡化",
+      "透明背景，可選有無色邊框",
+      "提供高解析度 PNG",
+    ],
     popular: false,
   },
   {
     name: "半身插圖",
     nameEn: "BUST",
     price: "NT$ 1,000",
-    description: "半身角色委託",
-    features: [
-      "定價為單一角色",
-      "增加一人 +50%",
-      "簡單背景",
-      "明信片尺寸",
-      "提供高解析度 PNG",
-    ],
+    description: "半身人物全彩委託",
+    features: ["簡單背景", "明信片尺寸", "提供高解析度 PNG"],
     popular: false,
   },
   {
     name: "全身插圖",
     nameEn: "FULL",
     price: "NT$ 1,500",
-    description: "全身人物委託",
-    features: [
-      "定價為單一角色",
-      "增加一人 +50%",
-      "風格化背景",
-      "明信片尺寸",
-      "提供高解析度 PNG",
-    ],
+    description: "整身人物全彩委託",
+    features: ["風格化背景", "明信片尺寸", "提供高解析度 PNG"],
     popular: true,
   },
   {
@@ -44,9 +36,8 @@ const pricingPlans = [
     price: "NT$ 900",
     description: "Q版動態，桌寵及遊戲直播",
     features: [
-      "單一角色",
-      "透明背景，可選有色邊框",
-      "簡單漂浮動態",
+      "Q版方案+動態",
+      "透明背景，可選有無色邊框",
       "語音觸發張口動態",
       "提供打包檔",
     ],
@@ -55,7 +46,7 @@ const pricingPlans = [
 ];
 
 const addOns = [
-  { name: "額外角色", price: "+50%" },
+  { name: "增加人物", price: "+50%" },
   { name: "複雜要求", price: "+30%" },
   { name: "加急服務", price: "+50%" },
   { name: "商業使用", price: "+100%" },
@@ -83,6 +74,11 @@ const addOns = [
     <!-- Pricing Cards -->
     <section class="py-16">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <p class="text-muted-foreground text-lg text-center mb-12">
+          ※ 請注意皆為驚喜包型式，風格務必參考作品展示確認後，可以接受再委託哦！
+          ☄
+        </p>
+
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <!-- Wrapper for badge positioning -->
           <div
@@ -113,7 +109,7 @@ const addOns = [
                   <h3 class="text-xl font-bold text-foreground mt-1">
                     {{ plan.name }}
                   </h3>
-                  <p class="text-muted-foreground text-sm mt-2">
+                  <p class="text-muted-foreground text-md mt-2">
                     {{ plan.description }}
                   </p>
                 </div>
@@ -154,6 +150,10 @@ const addOns = [
             </div>
           </div>
         </div>
+
+        <p class="text-muted-foreground text-lg text-center mt-12">
+          ※ 定價皆為單一人物
+        </p>
       </div>
     </section>
 
@@ -165,7 +165,7 @@ const addOns = [
             class="font-pixel text-xs text-muted-foreground tracking-widest uppercase"
             >ADD-ONS</span
           >
-          <h2 class="text-2xl font-bold text-foreground mt-4">附加服務</h2>
+          <h2 class="text-2xl font-bold text-foreground my-4">附加服務</h2>
           <p class="text-muted-foreground text-sm leading-relaxed">
             此項僅供參考，詳細價格會在正式連絡過程做上下估算。
           </p>

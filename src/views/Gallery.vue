@@ -254,7 +254,7 @@ const getCategoryName = (categoryId) => {
                 </p>
               </div>
               <RouterLink to="/contact" class="pixel-btn text-center">
-                委託相似風格
+                前往委託表單
               </RouterLink>
             </div>
           </div>
