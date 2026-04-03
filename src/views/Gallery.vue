@@ -4,168 +4,97 @@ import { computed, ref } from "vue";
 const selectedCategory = ref("all");
 const selectedImage = ref(null);
 
-import chibi01 from "../assets/images/gallery/chibi-01.png";
-import chibi02 from "../assets/images/gallery/chibi-02.jpg";
-import chibiFf01Say from "../assets/images/gallery/chibi-ff01-say.PNG";
-import chibiTf02 from "../assets/images/gallery/chibi-tf02.png";
-import chibiTf03 from "../assets/images/gallery/chibi-tf03.png";
+const apiKey = "AIzaSyDP3Emv1kQjchlRuUKOjVALMtzBR0DH8Ps";
+const sheetId = "1B0FLaAt37AEleSYhlS5353stq5DQWZ_ThIx1G09w5io";
 
-import full01 from "../assets/images/gallery/full-01.JPEG";
-import full02 from "../assets/images/gallery/full-02.JPEG";
-import full04 from "../assets/images/gallery/full-04.JPEG";
-import full05 from "../assets/images/gallery/full-05.png";
-import fullHh01 from "../assets/images/gallery/full-hh01.png";
-import fullPm01 from "../assets/images/gallery/full-pm01.jpg";
-import fullPm02 from "../assets/images/gallery/full-pm02.png";
+// Sheets 中要取得的資料範圍，格式如下
+const range = "gallery!A2:E";
+// Sheets API 的 URL
+const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`;
 
-import half01 from "../assets/images/gallery/half-01.png";
-import half02 from "../assets/images/gallery/half-02.JPEG";
-import half03 from "../assets/images/gallery/half-03.png";
-import half04 from "../assets/images/gallery/half-04.JPEG";
-import halfTf01 from "../assets/images/gallery/half-tf01.png";
+const parsedRows = ref([]);
+const artworks = ref([]);
+const categories = ref([{ id: "all", name: "全部" }]);
 
-import pngtuber01 from "../assets/images/gallery/pngtuber-01.gif";
+// 以 import.meta.glob 建立檔名 -> 打包後 url 的對照表（eager + as: 'url'）
+const imageModules = import.meta.glob("../assets/images/gallery/*", {
+  eager: true,
+  as: "url",
+});
 
-const categories = [
-  { id: "all", name: "全部" },
-  { id: "full", name: "全身" },
-  { id: "bust", name: "半身" },
-  { id: "chibi", name: "Q版" },
-  { id: "pngtuber", name: "PNGTuber" },
-];
+// 轉成 { "chibi-01.png": "/_assets/xxx.hash.png", ... }
+const imageMap = Object.fromEntries(
+  Object.entries(imageModules).map(([p, url]) => {
+    const name = p.split("/").pop();
+    return [name, url];
+  })
+);
 
-const artworks = [
-  {
-    id: 1,
-    title: "RANFREN 二創插畫",
-    category: "full",
-    year: "2024",
-    image: full02,
-  },
-  {
-    id: 2,
-    title: "RANFREN 二創插畫",
-    category: "full",
-    year: "2024",
-    image: full01,
-  },
-  {
-    id: 3,
-    title: "PKMN FRPR 二創插畫",
-    category: "full",
-    year: "2023",
-    image: fullPm01,
-  },
-  {
-    id: 4,
-    title: "PKMN F 二創插畫",
-    category: "full",
-    year: "2025",
-    image: full04,
-  },
-  {
-    id: 5,
-    title: "HAZBIN HOTEL VV 二創插畫",
-    category: "full",
-    year: "2023",
-    image: full05,
-  },
-  {
-    id: 6,
-    title: "HAZBIN HOTEL VV 二創插畫",
-    category: "full",
-    year: "2024",
-    image: fullHh01,
-  },
-  {
-    id: 7,
-    title: "PKMN F 二創插畫",
-    category: "full",
-    year: "2023",
-    image: fullPm02,
-  },
-  {
-    id: 8,
-    title: "TF GIJINKA1 二創插畫",
-    category: "full",
-    year: "2026",
-    image: half03,
-  },
-  {
-    id: 9,
-    title: "PKMN OMOCHIRI 二創插畫",
-    category: "bust",
-    year: "2025",
-    image: half01,
-  },
-  {
-    id: 10,
-    title: "PKMN FRPR 二創插畫",
-    category: "bust",
-    year: "2025",
-    image: half02,
-  },
-  {
-    id: 11,
-    title: "TF GIJINKA2 二創插畫",
-    category: "bust",
-    year: "2024",
-    image: half04,
-  },
-  {
-    id: 12,
-    title: "TF OVERMAX 二創插畫",
-    category: "bust",
-    year: "2024",
-    image: halfTf01,
-  },
-  {
-    id: 13,
-    title: "FF14 PNGtuber Q版動態展示",
-    category: "pngtuber",
-    year: "2024",
-    image: pngtuber01,
-  },
-  {
-    id: 14,
-    title: "FF14 Q版",
-    category: "chibi",
-    year: "2024",
-    image: chibiFf01Say,
-  },
-  {
-    id: 15,
-    title: "PKMN Q版",
-    category: "chibi",
-    year: "2025",
-    image: chibi01,
-  },
-  {
-    id: 16,
-    title: "RANFREN Q版",
-    category: "chibi",
-    year: "2024",
-    image: chibi02,
-  },
-  {
-    id: 17,
-    title: "TF OVERMAX Q版",
-    category: "chibi",
-    year: "2024",
-    image: chibiTf02,
-  },
-  {
-    id: 18,
-    title: "TF MEGASTAR Q版",
-    category: "chibi",
-    year: "2024",
-    image: chibiTf03,
-  },
-];
+fetch(url)
+  .then((response) => response.json())
+  .then((data) => {
+    const rows = data.values || [];
+
+    parsedRows.value = rows.map((r, i) => ({
+      id: r[0] ? (isNaN(Number(r[0])) ? r[0] : Number(r[0])) : i + 1,
+      title: r[1] || "",
+      category: r[2] || "",
+      year: r[3] || "",
+      imageRaw: (r[4] || "").trim(),
+      raw: r,
+    }));
+
+    // parsedRows 轉成 artworks，image 欄解析成可用的 url
+    artworks.value = parsedRows.value
+      .map((item) => {
+        const link = item.imageRaw;
+        let imageSrc = "";
+
+        if (!link) {
+          imageSrc = ""; // 可放預設圖 url
+        } else if (link.startsWith("http://") || link.startsWith("https://")) {
+          imageSrc = link;
+        } else {
+          // 先直接用檔名比對 imageMap（大小寫敏感與否都試一次）
+          imageSrc =
+            imageMap[link] ||
+            imageMap[link.toLowerCase()] ||
+            imageMap[link.toUpperCase()] ||
+            "";
+          // 若 imageMap 沒找到，可嘗試以相對 public 路徑（如果你把檔案放 public）
+          if (!imageSrc && link) {
+            imageSrc = `/assets/images/gallery/${link}`;
+          }
+        }
+
+        return {
+          id: item.id,
+          title: item.title,
+          category: item.category,
+          year: item.year,
+          image: imageSrc,
+          raw: item.raw,
+        };
+      })
+      .filter((a) => a.title || a.category); // 可依需求調整過濾條件
+
+    // 動態產生 categories（保留 all）
+    const cats = new Map();
+    artworks.value.forEach((a) => {
+      if (a.category) cats.set(a.category, a.category);
+    });
+    categories.value = [
+      { id: "all", name: "全部" },
+      ...Array.from(cats.keys()).map((k) => ({ id: k, name: k })),
+    ];
+  })
+  .catch((error) => console.error("Error:", error));
 
 const filteredArtworks = computed(() => {
-  if (selectedCategory.value === "all") return artworks;
-  return artworks.filter((art) => art.category === selectedCategory.value);
+  if (selectedCategory.value === "all") return artworks.value;
+  return artworks.value.filter(
+    (art) => art.category === selectedCategory.value
+  );
 });
 
 const openModal = (artwork) => {
@@ -179,7 +108,7 @@ const closeModal = () => {
 };
 
 const getCategoryName = (categoryId) => {
-  const category = categories.find((c) => c.id === categoryId);
+  const category = categories.value.find((c) => c.id === categoryId);
   return category ? category.name : categoryId;
 };
 </script>
