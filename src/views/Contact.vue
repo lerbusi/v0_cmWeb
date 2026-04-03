@@ -1,4 +1,19 @@
-<script setup></script>
+<script setup>
+import { ref } from "vue";
+
+const iframeHeight = ref(1500); // 預設初始高度（px）
+const hasLoadedOnce = ref(false);
+const expanded = ref(false);
+
+const handleLoad = () => {
+  if (!hasLoadedOnce.value) {
+    hasLoadedOnce.value = true;
+  } else {
+    iframeHeight.value = 300;
+    window.scrollTo(0, 0);
+  }
+};
+</script>
 
 <template>
   <div class="pt-16">
@@ -29,14 +44,14 @@
         </div>
         <!-- Google Form -->
         <iframe
-          class="w-full"
+          class="w-full transition-all duration-500"
+          :style="{ height: iframeHeight + 'px', minHeight: '300px' }"
           src="https://docs.google.com/forms/d/e/1FAIpQLSfZMj8IzdS8L9eYNNcHHveXJObJNpWYb6IBqvSJ58OkgOySsA/viewform?embedded=true"
-          height="1500"
           frameborder="0"
-          marginheight="0"
-          marginwidth="0"
-          >載入中…</iframe
+          @load="handleLoad"
         >
+          載入中…
+        </iframe>
 
         <!-- Alternative Contact -->
         <div class="mt-12 pt-12 border-t border-border">
