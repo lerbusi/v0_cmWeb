@@ -7,9 +7,10 @@ const expanded = ref(false);
 
 const handleLoad = () => {
   if (!hasLoadedOnce.value) {
+    // 第一次載入（使用者看到表單時） -> 保持 large 或讓使用者選擇展開
     hasLoadedOnce.value = true;
   } else {
-    iframeHeight.value = 300;
+    iframeHeight.value = 400;
     window.scrollTo(0, 0);
   }
 };
@@ -45,7 +46,11 @@ const handleLoad = () => {
         <!-- Google Form -->
         <iframe
           class="w-full transition-all duration-500"
-          :style="{ height: iframeHeight + 'px', minHeight: '300px' }"
+          :style="{
+            height: iframeHeight + 'px',
+            minHeight: '300px',
+            filter: 'invert(0.95)',
+          }"
           src="https://docs.google.com/forms/d/e/1FAIpQLSfZMj8IzdS8L9eYNNcHHveXJObJNpWYb6IBqvSJ58OkgOySsA/viewform?embedded=true"
           frameborder="0"
           @load="handleLoad"
