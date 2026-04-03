@@ -18,11 +18,11 @@ const isSubmitted = ref(false);
 const errors = reactive({});
 
 const commissionTypes = [
-  { value: "chibi", label: "Q版" },
-  { value: "bust", label: "半身插畫" },
-  { value: "full", label: "全身插畫" },
-  { value: "pngtuber", label: "PNGtuber" },
-  { value: "other", label: "其他" },
+  { value: "Q版", label: "Q版" },
+  { value: "半身插畫", label: "半身插畫" },
+  { value: "全身插畫", label: "全身插畫" },
+  { value: "PNGtuber", label: "PNGtuber" },
+  { value: "其他", label: "其他" },
 ];
 
 const validateForm = () => {
@@ -96,13 +96,19 @@ const resetForm = () => {
           <div class="font-pixel text-4xl text-foreground mb-4">OK</div>
           <h2 class="text-2xl font-bold text-foreground mb-4">表單已送出！</h2>
           <p class="text-muted-foreground mb-8">
-            感謝您的委託申請，我會在 1-2 個工作天內透過電子郵件回覆您。
+            感謝您的委託申請，會在數個工作天內透過電子郵件回覆您。
           </p>
-          <button @click="resetForm" class="pixel-btn">提交新委託</button>
         </div>
 
         <!-- Form -->
-        <form v-else @submit.prevent="handleSubmit" class="space-y-6">
+        <form
+          action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSfZMj8IzdS8L9eYNNcHHveXJObJNpWYb6IBqvSJ58OkgOySsA/formResponse"
+          method="POST"
+          target="hidden_iframe"
+          v-else
+          @submit.prevent="handleSubmit"
+          class="space-y-6"
+        >
           <!-- Name -->
           <div>
             <label class="block text-sm font-medium text-foreground mb-2">
@@ -251,6 +257,12 @@ const resetForm = () => {
             <span v-else>提交委託</span>
           </button>
         </form>
+
+        <iframe
+          name="hidden_iframe"
+          id="hidden_iframe"
+          style="display: none"
+        ></iframe>
 
         <!-- Alternative Contact -->
         <div class="mt-12 pt-12 border-t border-border">
