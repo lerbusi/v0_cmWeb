@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+
+  ::selection {
+    @apply bg-foreground text-background;
+  }
+}
+
+@layer components {
+  .pixel-border {
+    box-shadow: 4px 0 0 0 currentColor, -4px 0 0 0 currentColor,
+      0 4px 0 0 currentColor, 0 -4px 0 0 currentColor;
+  }
+
+  .pixel-btn {
+    @apply relative bg-foreground text-background font-pixel text-xs px-6 py-3 uppercase tracking-wider;
+    clip-path: polygon(
+      0 4px,
+      4px 4px,
+      4px 0,
+      calc(100% - 4px) 0,
+      calc(100% - 4px) 4px,
+      100% 4px,
+      100% calc(100% - 4px),
+      calc(100% - 4px) calc(100% - 4px),
+      calc(100% - 4px) 100%,
+      4px 100%,
+      4px calc(100% - 4px),
+      0 calc(100% - 4px)
+    );
+    transition: transform 0.1s, box-shadow 0.1s;
+  }
+
+  .pixel-btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 2px 2px 0 0 #fff;
+  }
+
+  .pixel-btn:active {
+    transform: translate(0, 0);
+    box-shadow: none;
+  }
+
+  .pixel-card {
+    @apply bg-muted border-2 border-border;
+    clip-path: polygon(
+      0 8px,
+      8px 8px,
+      8px 0,
+      calc(100% - 8px) 0,
+      calc(100% - 8px) 8px,
+      100% 8px,
+      100% calc(100% - 8px),
+      calc(100% - 8px) calc(100% - 8px),
+      calc(100% - 8px) 100%,
+      8px 100%,
+      8px calc(100% - 8px),
+      0 calc(100% - 8px)
+    );
+  }
+
+  .pixel-input {
+    @apply bg-muted border-2 border-border text-foreground px-4 py-3 w-full focus:border-foreground focus:outline-none transition-colors;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
