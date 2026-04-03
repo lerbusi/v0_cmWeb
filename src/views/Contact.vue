@@ -7,7 +7,6 @@ const form = reactive({
   media: "",
   email: "",
   type: "",
-  budget: "",
   description: "",
   reference: "",
   terms: false,
@@ -92,16 +91,18 @@ const resetForm = () => {
     <section class="py-16">
       <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Success State -->
-        <div v-if="isSubmitted" class="text-center py-16">
-          <div class="font-pixel text-4xl text-foreground mb-4">OK</div>
+        <div v-if="isSubmitted" class="text-center py-8">
+          <div class="font-pixel text-4xl text-foreground mb-4">COMMISSION SUBMIT</div>
           <h2 class="text-2xl font-bold text-foreground mb-4">表單已送出！</h2>
-          <p class="text-muted-foreground mb-8">
+          <p class="text-muted-foreground">
             感謝您的委託申請，會在數個工作天內透過電子郵件回覆您。
           </p>
+          <!-- <button @click="resetForm" class="pixel-btn">再次提交</button> -->
         </div>
 
         <!-- Form -->
         <form
+          id="google-form"
           action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSfZMj8IzdS8L9eYNNcHHveXJObJNpWYb6IBqvSJ58OkgOySsA/formResponse"
           method="POST"
           target="hidden_iframe"
@@ -116,6 +117,7 @@ const resetForm = () => {
             </label>
             <input
               v-model="form.name"
+              name="entry.1920571602"
               type="text"
               class="pixel-input"
               :class="errors.name ? 'border-red-500' : ''"
@@ -133,6 +135,7 @@ const resetForm = () => {
             </label>
             <input
               v-model="form.media"
+              name="entry.2060312935"
               type="text"
               class="pixel-input"
               :class="errors.media ? 'border-red-500' : ''"
@@ -150,6 +153,7 @@ const resetForm = () => {
             </label>
             <input
               v-model="form.email"
+              name="entry.1477972155"
               type="email"
               class="pixel-input"
               :class="errors.email ? 'border-red-500' : ''"
@@ -167,6 +171,7 @@ const resetForm = () => {
             </label>
             <select
               v-model="form.type"
+              name="entry.467955376"
               class="pixel-input appearance-none cursor-pointer"
               :class="errors.type ? 'border-red-500' : ''"
             >
@@ -191,6 +196,7 @@ const resetForm = () => {
             </label>
             <textarea
               v-model="form.description"
+              name="entry.1797244184"
               rows="5"
               class="pixel-input resize-none"
               :class="errors.description ? 'border-red-500' : ''"
@@ -208,6 +214,7 @@ const resetForm = () => {
             </label>
             <input
               v-model="form.reference"
+              name="entry.2105361224"
               type="text"
               class="pixel-input"
               placeholder="請提供參考圖片的外部連結（可選）"
@@ -258,6 +265,7 @@ const resetForm = () => {
           </button>
         </form>
 
+        <!-- Hidden iframe for form submission -->
         <iframe
           name="hidden_iframe"
           id="hidden_iframe"
@@ -275,6 +283,8 @@ const resetForm = () => {
               <span class="text-muted-foreground">Twitter: </span>
               <a
                 href="https://x.com/aler_ame02"
+                target="_blank"
+                rel="noopener noreferrer"
                 class="text-foreground hover:underline"
                 >@aler_ame02</a
               >
@@ -283,6 +293,8 @@ const resetForm = () => {
               <span class="text-muted-foreground">Threads: </span>
               <a
                 href="https://www.threads.com/@violent_sugar_"
+                target="_blank"
+                rel="noopener noreferrer"
                 class="text-foreground hover:underline"
                 >@violent_sugar_</a
               >
