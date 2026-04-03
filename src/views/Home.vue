@@ -1,7 +1,28 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { RouterLink } from "vue-router";
-import avatar from "../assets/images/home/avatar.png";
+
+const apiKey = "AIzaSyDP3Emv1kQjchlRuUKOjVALMtzBR0DH8Ps";
+const sheetId = "1B0FLaAt37AEleSYhlS5353stq5DQWZ_ThIx1G09w5io";
+
+// Sheets 中要取得的資料範圍，格式如下
+const range = "home!A2:B";
+// Sheets API 的 URL
+const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`;
+
+const aboutText = ref("");
+const aboutAvatar = ref("");
+
+fetch(url)
+  .then((response) => response.json())
+  .then((data) => {
+    const rows = data.values || [];
+
+    aboutText.value = rows?.[0]?.[0] ?? "";
+    aboutAvatar.value = rows?.[0]?.[1] ?? "";
+  })
+  .catch((error) => console.error("Error:", error));
+
 const isVisible = ref(false);
 
 onMounted(() => {
@@ -170,7 +191,7 @@ const features = [
             <img
               alt="avatar"
               class="avatar"
-              :src="avatar"
+              :src="aboutAvatar"
               width="100%"
               height="1"
             />
@@ -184,15 +205,7 @@ const features = [
             >
             <h2 class="text-3xl font-bold text-foreground mt-4 mb-6">關於我</h2>
             <div class="space-y-4 text-muted-foreground leading-relaxed">
-              <p>畫二創的業餘閒人，因為興趣建了本頁面整理委託資訊</p>
-              <p>
-                擅長內容為角色插畫：成男成女｜人外OK（暫不接機器人抱歉）
-                <br />
-                歡迎參考作品確認風格
-              </p>
-              <p>
-                目前會先展示較多二創做為參考，正在累積委託相關內容，請多包涵！
-              </p>
+              <div v-html="aboutText"></div>
             </div>
             <RouterLink to="/gallery" class="pixel-btn inline-block mt-8">
               作品風格展示
